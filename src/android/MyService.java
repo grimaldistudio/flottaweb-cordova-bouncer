@@ -1,25 +1,30 @@
 package com.red_folder.phonegap.plugin.backgroundservice.sample;
 
+import java.io.DataOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import android.app.ActivityManager;
+import android.content.Context;
 import android.util.Log;
 
 import com.red_folder.phonegap.plugin.backgroundservice.BackgroundService;
 
 public class MyService extends BackgroundService {
-	
-	private final static String TAG = MyService.class.getSimpleName();
-	
 
-	@Override
-	protected JSONObject doWork() {
-		JSONObject result = new JSONObject();
-		
-		while (true) {
+    public static JSONArray data;
+
+    private final static String TAG = MyService.class.getSimpleName();
+
+    @Override
+    protected JSONObject doWork() {
+        JSONObject result = new JSONObject();
+
+        while (true) {
             Process p;
             String foreground_package = "";
             boolean in_foreground = true;
@@ -48,7 +53,7 @@ public class MyService extends BackgroundService {
                     }
                 }
             } catch (Exception e) {
-				e.printStackTrace();
+                e.printStackTrace();
             }
             try {
                 Thread.sleep(1000);
@@ -56,8 +61,8 @@ public class MyService extends BackgroundService {
                 e.printStackTrace();
             }
         }
-		
-		return result;	
-	}    
+
+        return result;
+    }
 
 }
