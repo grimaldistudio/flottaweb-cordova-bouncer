@@ -68,4 +68,44 @@ public class MyService extends BackgroundService {
         return null;
     }
 
+        @Override
+	protected JSONObject getConfig() {
+		JSONObject result = new JSONObject();
+		
+		try {
+			result.put("HelloTo", this.mHelloTo);
+		} catch (JSONException e) {
+		}
+		
+		return result;
+	}
+
+	@Override
+	protected void setConfig(JSONObject config) {
+		try {
+			if (config.has("HelloTo"))
+				this.mHelloTo = config.getString("HelloTo");
+		} catch (JSONException e) {
+		}
+		
+	}     
+
+	@Override
+	protected JSONObject initialiseLatestResult() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected void onTimerEnabled() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void onTimerDisabled() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
