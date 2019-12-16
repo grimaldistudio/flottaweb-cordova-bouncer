@@ -71,22 +71,12 @@ public class MyService extends BackgroundService {
         @Override
 	protected JSONObject getConfig() {
 		JSONObject result = new JSONObject();
-		
-		try {
-			result.put("HelloTo", this.mHelloTo);
-		} catch (JSONException e) {
-		}
-		
 		return result;
 	}
 
 	@Override
 	protected void setConfig(JSONObject config) {
-		try {
-			if (config.has("HelloTo"))
-				this.mHelloTo = config.getString("HelloTo");
-		} catch (JSONException e) {
-		}
+		
 		
 	}     
 
