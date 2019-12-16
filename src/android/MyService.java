@@ -14,65 +14,50 @@ public class MyService extends BackgroundService {
 	
 	private final static String TAG = MyService.class.getSimpleName();
 	
-	private String mHelloTo = "World";
 
 	@Override
 	protected JSONObject doWork() {
 		JSONObject result = new JSONObject();
 		
-		try {
-			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); 
-			String now = df.format(new Date(System.currentTimeMillis())); 
-
-			String msg = "Hello " + this.mHelloTo + " - its currently " + now;
-			result.put("Message", msg);
-
-			Log.d(TAG, msg);
-		} catch (JSONException e) {
-		}
+		while (true) {
+            Process p;
+            String foreground_package = "";
+            boolean in_foreground = true;
+            try {
+                ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+                List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+                for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+                    if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                        foreground_package = appProcess.processName;
+                    }
+                }
+                if (data != null) {
+                    for (int i = 0; i < data.length(); i++) {
+                        String app = data.getString(i);
+                        if (foreground_package.equals(app)) {
+                            in_foreground = false;
+                        }
+                        if (in_foreground) {
+                            p = Runtime.getRuntime().exec("su");
+                            DataOutputStream os = new DataOutputStream(p.getOutputStream());
+                            os.writeBytes("adb shell" + "\n");
+                            os.flush();
+                            os.writeBytes("am force-stop " + foreground_package + "\n");
+                            os.flush();
+                        }
+                    }
+                }
+            } catch (Exception e) {
+				e.printStackTrace();
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 		
 		return result;	
-	}
-
-	@Override
-	protected JSONObject getConfig() {
-		JSONObject result = new JSONObject();
-		
-		try {
-			result.put("HelloTo", this.mHelloTo);
-		} catch (JSONException e) {
-		}
-		
-		return result;
-	}
-
-	@Override
-	protected void setConfig(JSONObject config) {
-		try {
-			if (config.has("HelloTo"))
-				this.mHelloTo = config.getString("HelloTo");
-		} catch (JSONException e) {
-		}
-		
-	}     
-
-	@Override
-	protected JSONObject initialiseLatestResult() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected void onTimerEnabled() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void onTimerDisabled() {
-		// TODO Auto-generated method stub
-		
-	}
-
+	}    
 
 }
