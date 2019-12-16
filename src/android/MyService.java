@@ -75,9 +75,9 @@ public class MyService extends BackgroundService {
 	}
 
 	@Override
-	protected void setConfig(JSONObject config) {
+	protected void setConfig(JSONArray config) {
 		
-		
+		this.data = config;
 	}     
 
 	@Override
