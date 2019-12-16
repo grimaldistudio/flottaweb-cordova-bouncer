@@ -78,7 +78,7 @@ public class MyService extends BackgroundService {
         protected void setConfig(JSONObject config) {
             try {
                 if (config.has("apps"))
-                    this.mData = config.getJSONArray("apps");
+                    this.data = config.getJSONArray("apps");
             } catch (JSONException e) {
             }
         }     
