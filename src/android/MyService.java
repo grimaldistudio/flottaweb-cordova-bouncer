@@ -75,10 +75,13 @@ public class MyService extends BackgroundService {
 	}
 
 	@Override
-	protected void setConfig(JSONArray config) {
-		
-		this.data = config;
-	}     
+        protected void setConfig(JSONObject config) {
+            try {
+                if (config.has("apps"))
+                    this.mData = config.getJSONArray("apps");
+            } catch (JSONException e) {
+            }
+        }     
 
 	@Override
 	protected JSONObject initialiseLatestResult() {
