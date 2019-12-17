@@ -40,7 +40,7 @@ public class MyService extends BackgroundService {
                     List<UsageStats> appList = usm.queryUsageStats(UsageStatsManager.INTERVAL_DAILY,
                             time - 1000 * 1000, time);
 
-                    Log.d("applist",appList.size());
+                    Log.d("applist",String.valueOf(appList.size()));
 
                     if (appList != null && appList.size() > 0) {
                         SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>();
