@@ -30,6 +30,11 @@ public class MyService extends BackgroundService {
         String foreground_package = "";
         boolean in_foreground = true;
         try {
+			List<ApplicationInfo> packages;
+                PackageManager pm;
+                pm = getPackageManager();
+                //get a list of installed apps.
+                packages = pm.getInstalledApplications(0);
             ActivityManager mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
                 if(mActivityManager!=null) {
                     for (ApplicationInfo packageInfo : packages) {
