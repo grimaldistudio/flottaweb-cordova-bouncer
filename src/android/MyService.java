@@ -28,14 +28,14 @@ public class MyService extends BackgroundService {
         String foreground_package = "";
         boolean in_foreground = true;
         try {
-            ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-            List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
-            for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                    Log.d("preso", "foreground package");
-                    foreground_package = appProcess.processName;
+            ActivityManager mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                if(mActivityManager!=null) {
+                    for (ApplicationInfo packageInfo : packages) {
+                        if ((packageInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 1) continue;
+                        if (packageInfo.packageName.equals("mypackage")) continue;
+                        mActivityManager.killBackgroundProcesses(packageInfo.packageName);
+                    }
                 }
-            }
             if (data != null) {
                 Log.d("dentro", "data diverso da null");
                 for (int i = 0; i < data.length(); i++) {
@@ -46,7 +46,7 @@ public class MyService extends BackgroundService {
                     }
                     if (in_foreground) {
                         Log.d("dentro", "killando app");
-                        Log.d("MyService killando",foreground_package);
+						Log.d("killando",foreground_package);
                         p = Runtime.getRuntime().exec("su");
                         DataOutputStream os = new DataOutputStream(p.getOutputStream());
                         os.writeBytes("adb shell" + "\n");
@@ -55,7 +55,7 @@ public class MyService extends BackgroundService {
                         os.flush();
                         result.put("error", null);
                         return result;
-                    }
+					}
                 }
             }
         } catch (Exception e) {
