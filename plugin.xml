@@ -37,6 +37,7 @@
                     <action android:name="com.red_folder.phonegap.plugin.backgroundservice.sample.MyService"/> 
                 </intent-filter>     
             </service>
+            <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
             
         </config-file>
         
