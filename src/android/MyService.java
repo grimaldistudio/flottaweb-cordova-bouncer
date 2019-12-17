@@ -21,7 +21,7 @@ import com.red_folder.phonegap.plugin.backgroundservice.BackgroundService;
 
 public class MyService extends BackgroundService {
 
-    public static JSONArray data;
+    public JSONArray data;
 
     private final static String TAG = MyService.class.getSimpleName();
 
@@ -97,12 +97,9 @@ public class MyService extends BackgroundService {
 
 	@Override
         protected void setConfig(JSONObject config) {
-Log.d("config", String.valueOf(config));
             try {
                 if (config.has("apps"))
                     this.data = config.getJSONArray("apps");
-Log.d("thisdata", String.valueOf(this.data));
-
             } catch (JSONException e) {
             }
         }     
