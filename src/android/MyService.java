@@ -1,5 +1,5 @@
 package com.red_folder.phonegap.plugin.backgroundservice.sample;
-​
+
 import java.io.DataOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,20 +12,20 @@ import android.content.Context;
 import android.util.Log;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-​
+
 import com.red_folder.phonegap.plugin.backgroundservice.BackgroundService;
-​
+
 public class MyService extends BackgroundService {
-​
+
     public static JSONArray data;
-​
+
     private final static String TAG = MyService.class.getSimpleName();
-​
+
  @Override
     protected JSONObject doWork() {
         Log.d("dentro", "doWork");
         JSONObject result = new JSONObject();
-​
+
         Process p;
         String foreground_package = "";
         boolean in_foreground = true;
