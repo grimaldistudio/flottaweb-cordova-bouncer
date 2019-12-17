@@ -12,6 +12,10 @@ import android.content.Context;
 import android.util.Log;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 
 import com.red_folder.phonegap.plugin.backgroundservice.BackgroundService;
 
@@ -30,17 +34,24 @@ public class MyService extends BackgroundService {
         String foreground_package = "";
         boolean in_foreground = true;
         try {
-			ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-                if (activityManager != null) {
-                    List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
-                    if (appProcesses != null) {
-                        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
-                            if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                                Log.d("preso", "foreground package");
-                                foreground_package = appProcess.processName;
-                                Log.d("in foreground", foreground_package);
-                            }
+			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    UsageStatsManager usm = (UsageStatsManager) getSystemService("usagestats");
+                    long time = System.currentTimeMillis();
+                    List<UsageStats> appList = usm.queryUsageStats(UsageStatsManager.INTERVAL_DAILY,
+                            time - 1000 * 1000, time);
+                    if (appList != null && appList.size() > 0) {
+                        SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>();
+                        for (UsageStats usageStats : appList) {
+                            mySortedMap.put(usageStats.getLastTimeUsed(),
+                                    usageStats);
                         }
+                        if (mySortedMap != null && !mySortedMap.isEmpty()) {
+                            foreground_package = mySortedMap.get(mySortedMap.lastKey()).getPackageName();
+                            Log.d("foreground package",foreground_package);
+                        }
+                    }
+                }
+			if(!foreground_package.isEmpty()) {			
             if (data != null) {
                             Log.d("dentro", "data diverso da null");
                             for (int i = 0; i < data.length(); i++) {
@@ -60,7 +71,6 @@ public class MyService extends BackgroundService {
                                     os.writeBytes("am force-stop " + foreground_package + "\n");
                                     os.flush();
                                 }
-			}
 					}
                         }
         } catch (Exception e) {
