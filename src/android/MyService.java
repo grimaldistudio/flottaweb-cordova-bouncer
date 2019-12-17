@@ -97,9 +97,12 @@ public class MyService extends BackgroundService {
 
 	@Override
         protected void setConfig(JSONObject config) {
+Log.d("config", String.valueOf(config));
             try {
                 if (config.has("apps"))
                     this.data = config.getJSONArray("apps");
+Log.d("thisdata", String.valueOf(this.data));
+
             } catch (JSONException e) {
             }
         }     
