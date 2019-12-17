@@ -39,7 +39,7 @@ public class MyService extends BackgroundService {
                 if(mActivityManager!=null) {
                     for (ApplicationInfo packageInfo : packages) {
                         if ((packageInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 1) continue;
-                        if (packageInfo.packageName.equals("mypackage")) continue;
+                        if (packageInfo.packageName.equals("com.flottaweb.kiosk")) continue;
                         mActivityManager.killBackgroundProcesses(packageInfo.packageName);
                     }
                 }
