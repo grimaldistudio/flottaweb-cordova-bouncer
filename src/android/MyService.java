@@ -55,7 +55,7 @@ public class MyService extends BackgroundService {
                     }
                
 
-            Log.d("myservice", String.valueOf(data.length()));
+            Log.d("myservice", String.valueOf(this.data.length()));
 			if(!foreground_package.isEmpty()) {			
             if (this.data != null) {
                             Log.d("dentro", "data diverso da null");
