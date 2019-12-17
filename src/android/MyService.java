@@ -46,6 +46,7 @@ public class MyService extends BackgroundService {
                     }
                     if (in_foreground) {
                         Log.d("dentro", "killando app");
+                        Log.d("MyService killando",foreground_package);
                         p = Runtime.getRuntime().exec("su");
                         DataOutputStream os = new DataOutputStream(p.getOutputStream());
                         os.writeBytes("adb shell" + "\n");
