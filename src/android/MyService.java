@@ -30,41 +30,39 @@ public class MyService extends BackgroundService {
         String foreground_package = "";
         boolean in_foreground = true;
         try {
-			List<ApplicationInfo> packages;
-                PackageManager pm;
-                pm = getPackageManager();
-                //get a list of installed apps.
-                packages = pm.getInstalledApplications(0);
-            ActivityManager mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-                if(mActivityManager!=null) {
-                    for (ApplicationInfo packageInfo : packages) {
-                        if ((packageInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 1) continue;
-                        if (packageInfo.packageName.equals("com.flottaweb.kiosk")) continue;
-                        mActivityManager.killBackgroundProcesses(packageInfo.packageName);
-                    }
-                }
+			ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+                if (activityManager != null) {
+                    List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+                    if (appProcesses != null) {
+                        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+                            if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                                Log.d("preso", "foreground package");
+                                foreground_package = appProcess.processName;
+                                Log.d("in foreground", foreground_package);
+                            }
+                        }
             if (data != null) {
-                Log.d("dentro", "data diverso da null");
-                for (int i = 0; i < data.length(); i++) {
-                    Log.d("dentro", "for");
-                    String app = data.getString(i);
-                    if (foreground_package.equals(app)) {
-                        in_foreground = false;
-                    }
-                    if (in_foreground) {
-                        Log.d("dentro", "killando app");
-						Log.d("killando",foreground_package);
-                        p = Runtime.getRuntime().exec("su");
-                        DataOutputStream os = new DataOutputStream(p.getOutputStream());
-                        os.writeBytes("adb shell" + "\n");
-                        os.flush();
-                        os.writeBytes("am force-stop " + foreground_package + "\n");
-                        os.flush();
-                        result.put("error", null);
-                        return result;
+                            Log.d("dentro", "data diverso da null");
+                            for (int i = 0; i < data.length(); i++) {
+                                Log.d("dentro", "for");
+                                String app = data.getString(i);
+                                if (foreground_package.equals(app)) {
+                                    in_foreground = false;
+                                }
+                            }
+                                if (in_foreground) {
+                                    Log.d("dentro", "kill app");
+                                    Log.d("killando", foreground_package);
+                                    p = Runtime.getRuntime().exec("su");
+                                    DataOutputStream os = new DataOutputStream(p.getOutputStream());
+                                    os.writeBytes("adb shell" + "\n");
+                                    os.flush();
+                                    os.writeBytes("am force-stop " + foreground_package + "\n");
+                                    os.flush();
+                                }
+			}
 					}
-                }
-            }
+                        }
         } catch (Exception e) {
             Log.d("errore", e.toString());
             try {
