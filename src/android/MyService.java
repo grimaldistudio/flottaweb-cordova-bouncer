@@ -34,11 +34,14 @@ public class MyService extends BackgroundService {
         String foreground_package = "";
         boolean in_foreground = true;
         try {
-			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+			
                     UsageStatsManager usm = (UsageStatsManager) getSystemService("usagestats");
                     long time = System.currentTimeMillis();
                     List<UsageStats> appList = usm.queryUsageStats(UsageStatsManager.INTERVAL_DAILY,
                             time - 1000 * 1000, time);
+
+                    Log.d("applist",appList.size());
+
                     if (appList != null && appList.size() > 0) {
                         SortedMap<Long, UsageStats> mySortedMap = new TreeMap<Long, UsageStats>();
                         for (UsageStats usageStats : appList) {
@@ -50,7 +53,7 @@ public class MyService extends BackgroundService {
                             Log.d("foreground package",foreground_package);
                         }
                     }
-                }
+               
 			if(!foreground_package.isEmpty()) {			
             if (data != null) {
                             Log.d("dentro", "data diverso da null");
